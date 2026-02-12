@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { motion } from 'framer-motion';
 
-const LoadingScreen = () => {
+const LoadingScreen = ({ text = "GENERATE..." }) => {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
@@ -117,8 +117,8 @@ const LoadingScreen = () => {
             {/* TEXT & LOADING BAR */}
             <div className="w-full space-y-2">
                 <div className="flex justify-between items-end">
-                    <h2 className="font-['Bangers'] text-4xl text-white tracking-wider animate-pulse">
-                        GENERATE...
+                    <h2 className="font-['Bangers'] text-4xl text-white tracking-wider animate-pulse uppercase">
+                        {text}
                     </h2>
                     <span className="text-xs text-yellow-400 font-bold mb-1">
                         {Math.floor(progress)}%
@@ -140,15 +140,10 @@ const LoadingScreen = () => {
 
                 {/* Random Tech Text */}
                 <div className="flex justify-between text-[10px] text-gray-500 uppercase mt-2">
-                    <span>Mem: {240 + Math.floor(progress * 10)}MB / 1024MB</span>
                     <span className="animate-bounce">Encrypting...</span>
                 </div>
             </div>
         </div>
-
-        {/* --- DECORATIVE CORNERS (HUD STYLE) --- */}
-        <div className="absolute top-4 left-4 w-16 h-16 border-l-4 border-t-4 border-white/20"></div>
-        <div className="absolute bottom-4 right-4 w-16 h-16 border-r-4 border-b-4 border-white/20"></div>
 
     </motion.div>,
     document.body

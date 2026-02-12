@@ -31,7 +31,7 @@ const Footer = () => {
                 BIRTHDAY.IO
               </h3>
               <p className="font-mono text-xs text-zinc-500 tracking-wider">
-                V2.6.0 // SYSTEM STABLE
+                V0.1.0 // DEMO RELEASE
               </p>
             </div>
             <p className="font-mono text-[10px] text-zinc-400 leading-relaxed max-w-xs">

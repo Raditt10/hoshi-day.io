@@ -1,38 +1,80 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import MangaLayout from '../components/layout/Layout';
 import { motion, AnimatePresence } from 'framer-motion';
 import LoadingScreen from '../components/ui/LoadingScreen';
 import SearchBar from '../components/ui/SearchBar';
 import Footer from '../components/ui/Footer';
+import CustomToast from '../components/ui/Warning';
+import { CHARACTERS } from '../data/characters';
 
 const Home = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ name: '', day: '', month: '', character: 'gojo' });
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingText, setLoadingText] = useState('GENERATE...');
   const [searchQuery, setSearchQuery] = useState('');
-
-  const CHARACTERS = [
-    { id: 'gojo', name: 'GOJO SATORU', desc: 'Special Grade', img: '/avatar/Gojo_satoru.webp' },
-    { id: 'leon', name: 'LEON SCOTT KENNEDY', desc: 'Survival Expert', img: '/avatar/Leon_scott_keneddy.webp' },
-    { id: 'levi', name: 'LEVI ACKERMEN', desc: 'Humanity\'s Strongest', img: '/avatar/levi_ackermen.webp' }
-  ];
+  const [toast, setToast] = useState({ show: false, message: '' });
 
   const filteredCharacters = CHARACTERS.filter(char => 
     char.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
     char.desc.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  const showToast = (msg) => {
+    setToast({ show: true, message: msg });
+    // Clear toast after 3 seconds
+    setTimeout(() => {
+        setToast(prev => ({ ...prev, show: false }));
+    }, 3000);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(formData.name && formData.day && formData.month) {
-      setIsLoading(true);
-      // Simulate data processing delay
-      setTimeout(() => {
-        navigate(`/mission/${formData.name}/${formData.day}/${formData.month}/${formData.character}`, { state: { fromLoading: true } });
-      }, 2000);
+    
+    // 1. Validate Fields
+    if (!formData.name.trim()) {
+        showToast("TARGET NAME IS REQUIRED!");
+        return;
     }
+    if (!formData.day) {
+        showToast("MISSING DAY PARAMETER (DD)!");
+        return;
+    }
+    if (!formData.month) {
+        showToast("MISSING MONTH PARAMETER (MM)!");
+        return;
+    }
+    
+    // 2. Validate Date Logic
+    const day = parseInt(formData.day);
+    const month = parseInt(formData.month);
+
+    if (day < 1 || day > 31) {
+        showToast("INVALID DAY! (1-31)");
+        return;
+    }
+    if (month < 1 || month > 12) {
+        showToast("INVALID MONTH! (1-12)");
+        return;
+    }
+
+    // 3. Initiate Load
+    setLoadingText('GENERATE...');
+    setIsLoading(true);
+    
+    setTimeout(() => {
+      navigate(`/mission/${formData.name}/${formData.day}/${formData.month}/${formData.character}`, { state: { fromLoading: true } });
+    }, 2000);
   };
+
+  const handleDisplayAll = () => {
+    setLoadingText('LOADING DATA...');
+    setIsLoading(true);
+    setTimeout(() => {
+        navigate('/characters');
+    }, 2000);
+  }
 
   const comicVariants = {
     initial: { x: '50%', opacity: 0, scale: 0.9 },
@@ -126,7 +168,7 @@ const Home = () => {
            </p>
         </motion.div>
 
-        <form onSubmit={handleSubmit} className="space-y-6 md:space-y-8">
+        <form onSubmit={handleSubmit} noValidate className="space-y-6 md:space-y-8">
           <motion.div variants={itemVariants} className="group relative">
             <label className="block font-['Bangers'] text-xl md:text-2xl mb-1 ml-1">TARGET NAME</label>
             <div className="relative">
@@ -135,7 +177,7 @@ const Home = () => {
                 placeholder="Ex: Abdul Hussain"
                 className="w-full bg-gray-50 border-4 border-black p-4 font-bold text-lg md:text-2xl focus:shadow-[8px_8px_0px_#000] focus:bg-white focus:-translate-y-1 focus:-translate-x-1 focus:outline-none transition-all placeholder:text-gray-300 rounded-none"
                 onChange={e => setFormData({...formData, name: e.target.value})}
-                required
+                // deleted required
               />
               <div className="absolute right-4 top-1/2 -translate-y-1/2 font-mono text-xs text-gray-300 pointer-events-none">[REQ]</div>
             </div>
@@ -148,7 +190,7 @@ const Home = () => {
                 type="number" min="1" max="31" placeholder="DD"
                 className="w-full bg-gray-50 border-4 border-black p-4 font-bold text-center text-xl md:text-2xl focus:shadow-[6px_6px_0px_#000] focus:bg-white focus:-translate-y-1 focus:outline-none transition-all rounded-none"
                 onChange={e => setFormData({...formData, day: e.target.value})}
-                required
+                // deleted required
               />
             </div>
             <div className="group">
@@ -157,7 +199,7 @@ const Home = () => {
                 type="number" min="1" max="12" placeholder="MM"
                 className="w-full bg-gray-50 border-4 border-black p-4 font-bold text-center text-xl md:text-2xl focus:shadow-[6px_6px_0px_#000] focus:bg-white focus:-translate-y-1 focus:outline-none transition-all rounded-none"
                 onChange={e => setFormData({...formData, month: e.target.value})}
-                required
+                // deleted required
               />
             </div>
           </motion.div>
@@ -225,14 +267,14 @@ const Home = () => {
             </div>
 
             {/* Show All / Reset Filter Section */}
-            <div className="mt-4 flex justify-center">
+            <div className="mt-4 flex justify-center relative z-50">
                 <button
-                   type="button" 
-                   onClick={() => setSearchQuery('')}
-                   className="text-xs md:text-sm font-mono font-bold text-zinc-500 hover:text-white hover:bg-black border-2 border-zinc-200 hover:border-black flex items-center gap-3 transition-all px-6 py-2 uppercase tracking-widest shadow-sm hover:shadow-[4px_4px_0_#000] hover:-translate-y-1"
+                   type="button"
+                   onClick={handleDisplayAll}
+                   className="text-xs md:text-sm font-mono font-bold text-zinc-500 hover:text-white hover:bg-black border-2 border-zinc-200 hover:border-black flex items-center gap-3 transition-all px-6 py-2 uppercase tracking-widest shadow-sm hover:shadow-[4px_4px_0_#000] hover:-translate-y-1 cursor-pointer"
                 >
                    <span>+</span>
-                   <span>DISPLAY ALL PERSONNEL</span>
+                   <span>VIEW ALL PERSONNEL</span>
                    <span>+</span>
                 </button>
             </div>
@@ -258,8 +300,15 @@ const Home = () => {
         </motion.div>
         
         <AnimatePresence>
-            {isLoading && <LoadingScreen />}
+            {isLoading && <LoadingScreen text={loadingText} />}
         </AnimatePresence>
+
+        {/* Custom Toast Notification */}
+        <CustomToast 
+            isVisible={toast.show} 
+            message={toast.message} 
+            onClose={() => setToast({...toast, show: false})} 
+        />
       </motion.div>
      </MangaLayout>
      
