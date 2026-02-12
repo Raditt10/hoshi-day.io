@@ -119,7 +119,7 @@ const Home = () => {
         <motion.div variants={itemVariants} className="mb-10 border-l-[12px] border-black pl-6 relative">
            <span className="absolute -top-6 -left-3 text-[10px] font-mono font-bold bg-black text-white px-2 py-0.5">Make Your Own Version.</span>
            <h2 className="font-['Bangers'] text-5xl md:text-8xl mb-2 leading-[0.85] text-black drop-shadow-[2px_2px_0_rgba(0,0,0,0.1)]">
-             MISSION<br/>INITIATION
+             FILL OUT<br/>THE FORM
            </h2>
            <p className="font-mono text-xs md:text-sm bg-black text-white inline-block px-3 py-1 transform -skew-x-12 shadow-[4px_4px_0_rgba(0,0,0,0.2)]">
              // Congratulate your lover Fiction Character! //
@@ -222,6 +222,19 @@ const Home = () => {
                   )}
                 </div>
               ))}
+            </div>
+
+            {/* Show All / Reset Filter Section */}
+            <div className="mt-4 flex justify-center">
+                <button
+                   type="button" 
+                   onClick={() => setSearchQuery('')}
+                   className="text-xs md:text-sm font-mono font-bold text-zinc-500 hover:text-white hover:bg-black border-2 border-zinc-200 hover:border-black flex items-center gap-3 transition-all px-6 py-2 uppercase tracking-widest shadow-sm hover:shadow-[4px_4px_0_#000] hover:-translate-y-1"
+                >
+                   <span>+</span>
+                   <span>DISPLAY ALL PERSONNEL</span>
+                   <span>+</span>
+                </button>
             </div>
           </motion.div>
 
