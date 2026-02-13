@@ -113,7 +113,3 @@ Project ini dilisensikan di bawah **MIT License**.
 ---
 
 *Dibuat oleh [Raditt10]*
-
-```
-
-```
