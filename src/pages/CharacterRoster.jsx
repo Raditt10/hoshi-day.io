@@ -4,15 +4,27 @@ import { useNavigate } from 'react-router-dom';
 import { CHARACTERS } from '../data/characters';
 import Footer from '../components/ui/Footer';
 import BackButton from '../components/ui/BackButton';
+import SearchBar from '../components/ui/SearchBar';
 
 const CharacterRoster = () => {
   const navigate = useNavigate();
-  // State untuk melacak kartu mana yang sedang "aktif" (menampilkan stats) di mobile
   const [activeCard, setActiveCard] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleCardClick = (id) => {
     setActiveCard(activeCard === id ? null : id);
   };
+
+  const handleSelectCharacter = (characterId) => {
+    navigate('/', { state: { selectedCharacter: characterId } });
+  };
+
+  // Filter characters based on search query
+  const filteredCharacters = CHARACTERS.filter(char =>
+    char.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    char.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    char.universe.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="min-h-screen bg-zinc-900 text-white overflow-x-hidden">
@@ -43,11 +55,48 @@ const CharacterRoster = () => {
             </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-          {CHARACTERS.map((char, index) => {
-            const isActive = activeCard === char.id;
+        {/* Search Bar */}
+        <div className="mb-8 w-full max-w-2xl mx-auto px-2 md:px-0">
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <SearchBar 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="SEARCH CHARACTERS..."
+            />
+          </motion.div>
+        </div>
 
-            return (
+        {/* No Results Message */}
+        <AnimatePresence>
+          {searchQuery && filteredCharacters.length === 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="text-center py-16"
+            >
+              <div className="inline-block bg-gradient-to-b from-zinc-800 to-black border-2 border-zinc-700 rounded-lg p-8 md:p-12 max-w-md mx-auto">
+                <div className="mb-4 text-4xl">😔</div>
+                <h3 className="font-['Bangers'] text-2xl md:text-3xl text-white mb-3">No Match Found</h3>
+                <p className="text-zinc-400 text-sm md:text-base font-mono">
+                  Sorry, it seems that character is not yet available here. Please wait for updates!
+                </p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Grid */}
+        {filteredCharacters.length > 0 || !searchQuery ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {(searchQuery === '' ? CHARACTERS : filteredCharacters).map((char, index) => {
+              const isActive = activeCard === char.id;
+
+              return (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -124,19 +173,32 @@ const CharacterRoster = () => {
                                    className="h-full bg-yellow-400 shadow-[0_0_10px_#facc15]" 
                                    initial={{ width: 0 }}
                                    whileInView={{ width: isActive || window.innerWidth >= 768 ? `${val}%` : 0 }}
-                                   // Logic di atas memastikan animasi jalan saat card di-tap di mobile
                                    transition={{ duration: 0.5, ease: "easeOut" }}
                                  />
                               </div>
                            </div>
                         ))}
                      </div>
+
+                     {/* SELECT BUTTON */}
+                     <motion.button
+                       onClick={(e) => {
+                         e.stopPropagation();
+                         handleSelectCharacter(char.id);
+                       }}
+                       whileHover={{ scale: 1.05 }}
+                       whileTap={{ scale: 0.95 }}
+                       className="w-full mt-6 bg-yellow-400 text-black border-2 border-black font-['Bangers'] text-lg px-4 py-3 rounded-lg font-bold hover:bg-yellow-300 transition-all shadow-[4px_4px_0_rgba(0,0,0,0.6)]"
+                     >
+                       SELECT THIS CHARACTER
+                     </motion.button>
                   </div>
                 </div>
               </motion.div>
             );
           })}
-        </div>
+          </div>
+        ) : null}
       </main>
       
       <Footer />

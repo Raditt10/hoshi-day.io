@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import MangaLayout from '../components/layout/Layout';
 import { motion, AnimatePresence } from 'framer-motion';
 import LoadingScreen from '../components/ui/LoadingScreen';
@@ -11,11 +11,21 @@ import { CHARACTERS } from '../data/characters';
 
 const Home = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [formData, setFormData] = useState({ name: '', day: '', month: '', character: 'gojo' });
   const [isLoading, setIsLoading] = useState(false);
   const [loadingText, setLoadingText] = useState('GENERATE...');
   const [searchQuery, setSearchQuery] = useState('');
   const [toast, setToast] = useState({ show: false, message: '' });
+
+  useEffect(() => {
+    if (location.state?.selectedCharacter) {
+      setFormData(prev => ({
+        ...prev,
+        character: location.state.selectedCharacter
+      }));
+    }
+  }, [location.state]);
 
   const filteredCharacters = CHARACTERS.filter(char => 
     char.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
