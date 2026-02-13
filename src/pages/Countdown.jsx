@@ -3,6 +3,7 @@ import { useParams, Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { QRCodeSVG } from 'qrcode.react';
 import Footer from '../components/ui/Footer';
+import LoadingScreen from '../components/ui/LoadingScreen';
 
 // --- SHARE MODAL COMPONENT ---
 const ShareModal = ({ url, onClose }) => {
@@ -311,7 +312,9 @@ const CountdownMission = () => {
     return () => clearInterval(timer);
   }, [day, month]);
 
-  if (!timeLeft) return <div className="h-screen bg-black flex items-center justify-center text-white font-mono animate-pulse">SYNCHRONIZING...</div>;
+  if (!timeLeft) {
+    return <LoadingScreen text="SYNCHRONIZING MISSION DATA..." />;
+  }
 
   const location = useLocation();
   const isFromLoading = location.state?.fromLoading;

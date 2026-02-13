@@ -68,7 +68,14 @@ const LoadingScreen = ({ text = "GENERATE..." }) => {
     const interval = setInterval(() => {
       setProgress((prev) => (prev >= 100 ? 100 : prev + Math.random() * 5));
     }, 150);
-    return () => clearInterval(interval);
+    
+    // Ensure canvas shows after 1 second even if video hasn't loaded
+    const timer = setTimeout(() => setIsVideoLoaded(true), 1000);
+    
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timer);
+    };
   }, []);
 
   return ReactDOM.createPortal(
@@ -79,13 +86,6 @@ const LoadingScreen = ({ text = "GENERATE..." }) => {
       className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center overflow-hidden font-mono"
     >
         {/* --- BACKGROUND EFFECTS --- */}
-        {/* Grid Pattern */}
-        <div className="absolute inset-0 opacity-20 pointer-events-none" 
-             style={{ 
-                backgroundImage: `linear-gradient(#333 1px, transparent 1px), linear-gradient(90deg, #333 1px, transparent 1px)`, 
-                backgroundSize: '40px 40px' 
-             }} 
-        />
         
         {/* Vignette (Gelap di pinggir) */}
         <div className="absolute inset-0 bg-[radial-gradient(circle,transparent_40%,#000_100%)] pointer-events-none" />
@@ -96,6 +96,8 @@ const LoadingScreen = ({ text = "GENERATE..." }) => {
             src="/loading.mp4" 
             autoPlay loop muted playsInline
             onLoadedData={() => setIsVideoLoaded(true)}
+            onPlay={() => setIsVideoLoaded(true)}
+            onCanPlay={() => setIsVideoLoaded(true)}
             className="absolute opacity-0 pointer-events-none w-1 h-1"
         />
 
@@ -107,8 +109,18 @@ const LoadingScreen = ({ text = "GENERATE..." }) => {
                 {/* The Character/Video */}
                 <canvas 
                     ref={canvasRef}
-                    className={`w-full h-full object-contain transition-opacity duration-700 ${isVideoLoaded ? 'opacity-100' : 'opacity-0'}`}
+                    className={`w-full h-full object-contain transition-opacity duration-500 ${isVideoLoaded ? 'opacity-100' : 'opacity-50'}`}
                 />
+                
+                {/* Loading Indicator when Video Not Ready */}
+                {!isVideoLoaded && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="inline-block w-8 h-8 border-2 border-white border-t-yellow-400 rounded-full animate-spin"></div>
+                      <p className="text-white text-xs mt-2">Loading Animation...</p>
+                    </div>
+                  </div>
+                )}
                 
                 {/* Scanline Effect (Garis berjalan turun) */}
                 <div className="absolute inset-0 h-[20%] w-full animate-scan pointer-events-none" />
