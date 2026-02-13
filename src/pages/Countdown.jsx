@@ -337,20 +337,20 @@ const CountdownMission = () => {
   const phaseData = getPhaseData(timeLeft.totalDays);
 
   return (
-    <>
-    <motion.div 
-      variants={comicVariants}
-      initial="initial"
-      animate="animate"
-      exit="exit"
-      className="flex flex-col min-h-screen md:h-screen md:flex-row bg-white overflow-x-hidden md:overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)]"
-    >
+    <div className="flex flex-col min-h-screen bg-white">
+      <motion.div 
+        variants={comicVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        className="flex flex-col md:flex-row flex-1 overflow-x-hidden shadow-[0_0_50px_rgba(0,0,0,0.5)]"
+      >
       
       {/* --- PANEL VISUAL (TOP on Mobile, RIGHT on Desktop) --- */}
       <AnimatePresence mode='wait'>
         <motion.div 
             key={bgPhase}
-            className="relative flex-1 flex flex-col justify-center overflow-hidden min-h-[45vh] md:min-h-screen order-1 md:order-2"
+            className="relative flex-1 flex flex-col justify-center overflow-hidden min-h-[45vh] md:min-h-full order-1 md:order-2"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.8 }}
         >
             <div 
@@ -398,7 +398,7 @@ const CountdownMission = () => {
       </AnimatePresence>
 
       {/* --- PANEL INFO (BOTTOM on Mobile, LEFT on Desktop) --- */}
-      <div className="relative z-30 flex-none w-full md:w-[380px] lg:w-[450px] bg-white border-t-8 md:border-t-0 md:border-r-8 border-black p-6 md:p-10 flex flex-col justify-between order-2 md:order-1 min-h-[50vh] h-auto md:h-screen">
+      <div className="relative z-30 flex-none w-full md:flex-1 md:w-auto bg-white border-t-8 md:border-t-0 md:border-r-8 border-black p-6 md:p-10 flex flex-col justify-between order-2 md:order-1 min-h-[55vh] md:min-h-full">
         <div className="space-y-6">
             <Link to="/" className="group inline-flex items-center text-black font-mono font-black text-xs md:text-sm no-underline mb-2">
               <span className="bg-black text-white px-2 py-1 mr-2 group-hover:bg-red-600 transition-colors">← ABORT</span> MISSION_LOG
@@ -438,8 +438,8 @@ const CountdownMission = () => {
 
     </motion.div>
 
-    <Footer />
-    </>
+      <Footer />
+    </div>
   );
 };
 
