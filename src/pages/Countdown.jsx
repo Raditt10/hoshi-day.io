@@ -256,11 +256,10 @@ const CountdownMission = () => {
     gojo: { img: '/avatar/Gojo_satoru.webp', name: 'SATORU GOJO' },
     leon: { img: '/avatar/Leon_scott_keneddy.webp', name: 'LEON KENNEDY' },
     levi: { img: '/avatar/levi_ackermen.webp', name: 'LEVI ACKERMAN' },
-    vanguard: { img: '/comicpanel.webp', name: 'VANGUARD' },
-    chrono: { img: '/comicpanel.webp', name: 'CHRONO' },
-    neon: { img: '/comicpanel2.webp', name: 'NEON' }
+    eren: { img: '/avatar/Eren_jaeger.webp', name: 'EREN JAEGER' },
+    caleb: { img: '/avatar/caleb.webp', name: 'CALEB' }
   };
-  
+    
   const activeChar = CHARACTER_CONFIG[character] || CHARACTER_CONFIG['gojo'];
 
   const getPhaseData = (days) => {
