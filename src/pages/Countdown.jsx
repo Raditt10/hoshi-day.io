@@ -259,7 +259,7 @@ const CountdownMission = () => {
     eren: { img: '/avatar/Eren_jaeger.webp', name: 'EREN JAEGER' },
     caleb: { img: '/avatar/caleb.webp', name: 'CALEB' }
   };
-    
+
   const activeChar = CHARACTER_CONFIG[character] || CHARACTER_CONFIG['gojo'];
 
   const getPhaseData = (days) => {
@@ -432,7 +432,7 @@ const CountdownMission = () => {
             >
                 <div className="absolute inset-0 bg-yellow-400 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out skew-y-12 origin-bottom-left"></div>
                 <div className="relative z-10 flex items-center justify-center h-full gap-3">
-                    <span className="font-['Bangers'] text-2xl sm:text-3xl text-white group-hover:text-black tracking-widest transition-colors">
+                    <span className="font-['Bangers'] text-2xl sm:text-3xl text-white group-hover:text-white tracking-widest transition-colors">
                         SEND CALLING CARD
                     </span>
                     <P5Star className="w-5 h-5 text-white group-hover:text-black group-hover:rotate-180 transition-all duration-500" />
