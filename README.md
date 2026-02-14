@@ -116,4 +116,4 @@ MIT License
 
 ---
 
-*Dibuat oleh [Raditt10] & Kanjirouu, 2026*
+*Dibuat oleh Kanjirouu, 2026*
