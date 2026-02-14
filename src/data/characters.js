@@ -19,12 +19,12 @@ export const CHARACTERS = [
       id: 'levi', 
       name: 'LEVI ACKERMEN', 
       desc: 'Humanity\'s Strongest', 
-      img: '/avatar/levi_ackermen.webp',
+      img: '/avatar/Levi_ackermen.webp',
       stats: { power: 95, speed: 99, technique: 98 },
       universe: 'ATTACK ON TITAN' 
     },
     { 
-      id: 'eren_jaeger', 
+      id: 'eren', 
       name: 'EREN JAEGER', 
       desc: 'Colossal Titan', 
       img: '/avatar/Eren_jaeger.webp',
