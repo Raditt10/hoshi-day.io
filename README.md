@@ -116,4 +116,4 @@ MIT License
 
 ---
 
-*Hak cipta sepenuhnya milik pengembang Kanjirouu.*
+*Hak cipta sepenuhnya milik pengembang Raditt10.*
